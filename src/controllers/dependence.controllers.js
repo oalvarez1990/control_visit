@@ -1,12 +1,12 @@
 const { request } = require("express");
 const Dependence = require("../models/dependences");
 const catchError = require("../utils/catchError");
-
+// TODO: Get endpoint dependence
 const getDependences = catchError(async (req = request, res = response) => {
   const dependences = await Dependence.find();
   res.json({ dependences });
 });
-// Create dependence
+// TODO: Create endpoint dependence
 const createDependance = catchError(async (req = request, res = response) => {
   const { code_dependence, name_dependence, id_company } = req.body;
   const existingCode = await Dependence.findOne({ code_dependence });
@@ -25,7 +25,7 @@ const createDependance = catchError(async (req = request, res = response) => {
   await newDependance.save();
   res.status(201).json({ newDependance });
 });
-// Update dependence
+// TODO: Update endpoint dependence
 
 module.exports = {
   getDependences,

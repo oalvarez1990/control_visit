@@ -44,5 +44,5 @@ const createEmployee = catchError(async (req = request, res = response) => {
 
 module.exports = {
   getEmployees,
-    createEmployee,
+  createEmployee,
 };
