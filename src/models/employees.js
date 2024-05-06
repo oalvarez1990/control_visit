@@ -29,8 +29,8 @@ const employeeSchema = new Schema({
   },
   extension_employee: {
     type: String,
-    required: [true, "Employee extension is required"],
-    minLength: [3, "Extension must be at least 3 characters"],
+    required: [false, "Employee extension is required"],
+    minLength: [1, "Extension must be at least 1 characters"],
     maxLength: [4, "Extension must be at most 4 characters"],
   },
   dependence: {
