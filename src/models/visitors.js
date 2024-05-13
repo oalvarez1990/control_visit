@@ -17,7 +17,10 @@ const visitorSchema = new Schema({
   type_id_visitor: {
     type: String,
     required: [true, "Visitor ID type is required."],
+    validator: (value) => ["CC", "CE", "NIT"].includes(value),
+    message: (props) => `${props.value} is not a valid document type`,
   },
+
   number_id_visitor: {
     type: String,
     required: [true, " Visitor ID number is required."],
