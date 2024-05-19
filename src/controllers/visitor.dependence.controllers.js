@@ -1,6 +1,8 @@
 const VisitorDependences = require("../models/visitors_dependences");
 const Visitor = require("../models/visitors");
 const Employees = require("../models/employees");
+const Dependencies = require("../models/dependences");
+const SendEmail = require("../utils/sendEmail");
 const { request, response } = require("express");
 const catchError = require("../utils/catchError");
 
@@ -15,7 +17,7 @@ const getVisitorDetails = catchError(async (req = request, res = response) => {
   const { type_id_visitor, number_id_visitor } = req.query;
 
   try {
-    // TODO: Search visit for id
+    // Search the visitor by type and ID number
     const visitor = await Visitor.findOne({
       type_id_visitor,
       number_id_visitor,
@@ -25,23 +27,16 @@ const getVisitorDetails = catchError(async (req = request, res = response) => {
       return res.status(404).json({ error: "The visitor was not found." });
     }
 
-    // TODO: Search visit for visitor
-    const visitsDetails = await VisitorDependences.find({
+    // Find the visitor's visits
+    const visitorDetails = await VisitorDependences.find({
       visitor: visitor._id,
     })
-      .populate("dependence", "name_dependence") 
-      .populate("visitor", "names_visitor") 
-      .populate({
-        path: "employees", //
-        populate: {
-          path: "employee_id",
-          model: "employees",
-          select: "names_employee",
-        },
-      })
+      .populate("visitor", "type_id_visitor number_id_visitor")
+      .populate("dependence", "name_dependence")
+      .populate("employee", "names_employee")
       .select("date_in hour_in date_out hour_out");
 
-    return res.status(200).json(visitsDetails);
+    return res.status(200).json(visitorDetails);
   } catch (error) {
     console.error("Error getting visitor details:", error);
     return res.status(500).json({ error: "Internal Server Error." });
@@ -103,6 +98,20 @@ const registerVisit = catchError(async (req = request, res = response) => {
     });
 
     await newVisit.save();
+
+    // TODO: Send email notification
+    const emailOptions = {
+      to: process.env.EMAIL, // Correo electrónico al que se enviará la notificación
+      subject: "Nueva visita registrada",
+      text: `Se ha registrado una nueva visita:\n\nNúmero de identificación: ${number_id_visitor}\nTipo de identificación: ${type_id_visitor}\nFecha de ingreso: ${date_in}\nHora de ingreso: ${hour_in}`,
+    };
+
+    try {
+      await SendEmail(emailOptions);
+      console.log("Correo electrónico enviado correctamente");
+    } catch (error) {
+      console.error("Error al enviar el correo electrónico:", error);
+    }
 
     // TODO: Return a success response
     return res.status(201).json({ message: "Visit successfully registered." });
