@@ -20,6 +20,7 @@ const createVisitor = catchError(async (req = request, res = response) => {
     company_where_visitor,
     things,
     eps,
+    arl,
     position,
   } = req.body;
   // Validate
@@ -42,6 +43,7 @@ const createVisitor = catchError(async (req = request, res = response) => {
     company_where_visitor,
     things,
     eps,
+    arl,
     position,
   });
 
@@ -74,6 +76,7 @@ const updateVisitor = catchError(async (req = request, res = response) => {
     company_where_visitor,
     things,
     eps,
+    arl,
     position,
   } = req.body;
   visitor.names_visitor = names_visitor;
@@ -85,6 +88,7 @@ const updateVisitor = catchError(async (req = request, res = response) => {
   visitor.company_where_visitor = company_where_visitor;
   visitor.things = things;
   visitor.eps = eps;
+  visitor.arl = arl;
   visitor.position = position;
   await visitor.save();
   res.json({ visitor });

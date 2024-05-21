@@ -61,6 +61,11 @@ const visitorSchema = new Schema({
     ref: "Position",
     required: true,
   },
+  arl: {
+    type: Schema.Types.ObjectId,
+    ref: "Arl",
+    required: true,
+  },
 });
 
 const Visitor = model("Visitor", visitorSchema);
