@@ -7,7 +7,7 @@ const employeeSchema = new Schema({
     trim: true,
   },
 
-  lastaname_employee: {
+  lastname_employee: {
     type: String,
     required: [true, "The lastname is required"],
     trim: true,
@@ -38,15 +38,21 @@ const employeeSchema = new Schema({
     ref: "Dependence",
     required: [true, " The dependence is required employee"],
   },
+  code_employee:{
+    type: String,
+    required: [true, "The code is required"],
+    trim: true,
+  
+  },
 });
 
 employeeSchema.virtual("fullName").get(function () {
-  return `${this.names_employee} ${this.lastaname_employee}`;
+  return `${this.names_employee} ${this.lastname_employee}`;
 });
 
 employeeSchema.pre("save", function (next) {
   this.names_employee = this.names_employee.toUpperCase();
-  this.lastaname_employee = this.lastaname_employee.toUpperCase();
+  this.lastname_employee = this.lastname_employee.toUpperCase();
   next();
 });
 
