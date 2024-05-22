@@ -22,7 +22,10 @@ const createVisitor = catchError(async (req = request, res = response) => {
     eps,
     arl,
     position,
+    status,
+    description_rejection_visitor,
   } = req.body;
+
   // Validate
   const existingVisitor = await Visitors.findOne({ number_id_visitor });
 
@@ -32,6 +35,7 @@ const createVisitor = catchError(async (req = request, res = response) => {
         "The visitor already exists with the provided identification number.",
     });
   }
+
   const visitor = new Visitors({
     names_visitor,
     lastname_visitor,
@@ -45,27 +49,32 @@ const createVisitor = catchError(async (req = request, res = response) => {
     eps,
     arl,
     position,
+    status,
+    description_rejection_visitor,
   });
 
   await visitor.save();
   res.json({ visitor });
 });
-//TODO:
+
+//TODO: Get visitor by number_id_visitor
 const getVisitor = catchError(async (req = request, res = response) => {
   const { number_id_visitor } = req.body;
   const visitor = await Visitors.findOne({ number_id_visitor });
   if (!visitor) {
-    res.status(404).json({ message: "The visitor is not registered" });
+    return res.status(404).json({ message: "The visitor is not registered" });
   }
   res.json({ visitor });
 });
-//TODO:
+
+//TODO: Update visitor by number_id_visitor
 const updateVisitor = catchError(async (req = request, res = response) => {
   const { number_id_visitor } = req.body;
   const visitor = await Visitors.findOne({ number_id_visitor });
   if (!visitor) {
-    res.status(404).json({ message: "The visitor is not registered" });
+    return res.status(404).json({ message: "The visitor is not registered" });
   }
+
   const {
     names_visitor,
     lastname_visitor,
@@ -78,21 +87,30 @@ const updateVisitor = catchError(async (req = request, res = response) => {
     eps,
     arl,
     position,
+    status,
+    description_rejection_visitor,
   } = req.body;
-  visitor.names_visitor = names_visitor;
-  visitor.lastname_visitor = lastname_visitor;
-  visitor.photo_visitor = photo_visitor;
-  visitor.type_id_visitor = type_id_visitor;
-  visitor.email_visitor = email_visitor;
-  visitor.phone_visitor = phone_visitor;
-  visitor.company_where_visitor = company_where_visitor;
-  visitor.things = things;
-  visitor.eps = eps;
-  visitor.arl = arl;
-  visitor.position = position;
+
+  visitor.names_visitor = names_visitor || visitor.names_visitor;
+  visitor.lastname_visitor = lastname_visitor || visitor.lastname_visitor;
+  visitor.photo_visitor = photo_visitor || visitor.photo_visitor;
+  visitor.type_id_visitor = type_id_visitor || visitor.type_id_visitor;
+  visitor.email_visitor = email_visitor || visitor.email_visitor;
+  visitor.phone_visitor = phone_visitor || visitor.phone_visitor;
+  visitor.company_where_visitor =
+    company_where_visitor || visitor.company_where_visitor;
+  visitor.things = things || visitor.things;
+  visitor.eps = eps || visitor.eps;
+  visitor.arl = arl || visitor.arl;
+  visitor.position = position || visitor.position;
+  visitor.status = status || visitor.status;
+  visitor.description_rejection_visitor =
+    description_rejection_visitor || visitor.description_rejection_visitor;
+
   await visitor.save();
   res.json({ visitor });
 });
+
 module.exports = {
   getVisitors,
   createVisitor,

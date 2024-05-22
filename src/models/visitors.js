@@ -46,6 +46,10 @@ const visitorSchema = new Schema({
     type: String,
     required: [true, " Visitor company is required."],
   },
+  description_rejection_visitor: {
+    type: String,
+  },
+
   things: {
     type: Schema.Types.ObjectId,
     ref: "Things",
@@ -64,6 +68,11 @@ const visitorSchema = new Schema({
   arl: {
     type: Schema.Types.ObjectId,
     ref: "Arl",
+    required: true,
+  },
+  status: {
+    type: Schema.Types.ObjectId,
+    ref: "Status",
     required: true,
   },
 });

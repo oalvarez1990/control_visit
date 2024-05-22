@@ -7,6 +7,7 @@ const positionRouter = require("./position.router");
 const visitorRouter = require("./visitors.router");
 const registerVisitRouter = require("./registerVisit.router");
 const arlRouter = require("./arl.router");
+const statusRouter = require('./status.router')
 const express = require("express");
 const router = express.Router();
 
@@ -20,5 +21,6 @@ router.use("/position", positionRouter);
 router.use("/visitor", visitorRouter);
 router.use("/registerVisit", registerVisitRouter);
 router.use("/arl", arlRouter);
+router.use("/status", statusRouter);
 
 module.exports = router;
